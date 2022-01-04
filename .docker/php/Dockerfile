@@ -19,7 +19,7 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 VOLUME /var/www/public
 
-RUN chown -R www-data:www-data /var/www/public
+RUN chown -R www-data:www-data /var/www
 
 WORKDIR /var/www
 
