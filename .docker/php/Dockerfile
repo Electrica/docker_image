@@ -17,7 +17,13 @@ RUN docker-php-ext-install pdo && \
 RUN curl -sS https://getcomposer.org/installer | \
             php -- --install-dir=/usr/bin/ --filename=composer
 
-RUN chown -R www-data:www-data /var/www
+RUN groupadd --gid 1000 www && \
+    useradd --gid 1000 --uid 1000 --home-dir /var/www www
+
+
+USER www
+
+COPY --chown=www:www . /var/www
 
 WORKDIR /var/www
 
