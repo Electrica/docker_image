@@ -1,0 +1,55 @@
+version: "3.1"
+
+services:
+  nginx:
+    container_name: nginx_latest
+    build: .docker/nginx
+    volumes:
+      - ./:/var/www
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=testdocker.local
+      - NGINX_PORT=80
+    volumes_from:
+      - php
+
+  php:
+    container_name: php-7.4
+    build: .docker/php
+    volumes:
+      - ./:/var/www
+
+  db:
+    container_name: mysql_latest
+    build: .docker/mysql
+    restart: always
+    volumes:
+    - database:/var/lib/mysql
+    environment:
+      - MYSQL_USER=userdb
+      - MYSQL_ROOT_PASSWORD=07112010
+      - MYSQL_PASSWORD=07112010
+      - MYSQL_DATABASE=userdb
+    ports:
+    - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - "8082:80"
+    environment:
+      - MYSQL_ROOT_PASSWORD=07112010
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=07112010
+      - PMA_ARBITRARY=1
+
+  composer:
+    image: library/composer:latest
+    command: install
+    volumes:
+    - ./public:/public
+
+volumes:
+  database:
