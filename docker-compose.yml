@@ -43,6 +43,7 @@ services:
       - PMA_USER=root
       - PMA_PASSWORD=07112010
       - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=300M
 
   composer:
     image: library/composer:latest

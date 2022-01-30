@@ -13,6 +13,8 @@ RUN docker-php-ext-install pdo && \
     docker-php-ext-install calendar && \
     docker-php-ext-install pcntl
 
+COPY php.ini /usr/local/etc/php
+
 # устанавливаем compose, если нужно
 RUN curl -sS https://getcomposer.org/installer | \
             php -- --install-dir=/usr/bin/ --filename=composer
