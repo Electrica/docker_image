@@ -14,41 +14,31 @@ RUN apt-get update && apt-get install -y \
     zip \
     mc \
     nano \
-    libmagickwand-dev \
     imagemagick \
     zlib1g-dev \
     libzip-dev \
     unzip \
     libpq-dev \
     git \
-    wget
+    wget \
+    libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# Очистка кэша apt
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-
-# Установка расширений php
-RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip mysqli pdo_mysql
-
-# Image Magick
 RUN printf "\n" | pecl install imagick
-RUN docker-php-ext-enable imagick gd
+RUN docker-php-ext-enable imagick
 
-RUN docker-php-ext-install gd && \
+RUN docker-php-ext-install pdo && \
     docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install pdo && \
+    docker-php-ext-install gd && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install opcache && \
     docker-php-ext-install zip && \
     docker-php-ext-install calendar && \
     docker-php-ext-install pcntl
 
-# Install the PHP gd library
-RUN docker-php-ext-configure gd \
-        --with-jpeg=/usr/lib \
-        --with-webp=/usr/include \
-        --with-freetype=/usr/include/freetype2 && \
-    docker-php-ext-install gd
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
+RUN cd /usr/src/php/ext/gd && make
+RUN cp /usr/src/php/ext/gd/modules/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/gd.so
+RUN docker-php-ext-install -j$(nproc) gd
 
 COPY php.ini /usr/local/etc/php
 
