@@ -6,6 +6,7 @@ services:
     build: .docker/nginx
     volumes:
       - ./:/var/www
+      - ./logs/nginx:/var/log/nginx
     ports:
       - "80:80"
     environment:
