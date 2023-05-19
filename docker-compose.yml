@@ -5,7 +5,7 @@ services:
     container_name: nginx_latest
     build: .docker/nginx
     volumes:
-      - ./:/var/www
+      - ./www:/var/www
       - ./logs/nginx:/var/log/nginx
     ports:
       - "80:80"
@@ -18,7 +18,7 @@ services:
     container_name: php-7.4
     build: .docker/php
     volumes:
-      - ./:/var/www/
+      - ./www:/var/www/
 
   db:
     container_name: mysql_latest
@@ -26,6 +26,9 @@ services:
     restart: always
     volumes:
       - database:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
+      - ./mysql:/var/lib/mysql
+      - ./mysql-files:/var/lib/mysql-files
     environment:
       - MYSQL_USER=userdb
       - MYSQL_ROOT_PASSWORD=07112010
