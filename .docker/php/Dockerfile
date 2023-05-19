@@ -46,10 +46,6 @@ COPY php.ini /usr/local/etc/php
 RUN curl -sS https://getcomposer.org/installer | \
             php -- --install-dir=/usr/bin/ --filename=composer
 
-RUN groupadd --gid 1000 www && \
-    useradd --gid 1000 --uid 1000 --home-dir /var/www www
-
-
 WORKDIR /var/www
 
 CMD ["php-fpm"]
