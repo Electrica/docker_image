@@ -37,10 +37,10 @@ RUN docker-php-ext-install pdo && \
 
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
 RUN cd /usr/src/php/ext/gd && make
-RUN cp /usr/src/php/ext/gd/modules/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20190902/gd.so
 RUN docker-php-ext-install -j$(nproc) gd
 
 COPY php.ini /usr/local/etc/php
+COPY www.conf /usr/local/etc/php-fpm.d
 
 # устанавливаем compose, если нужно
 RUN curl -sS https://getcomposer.org/installer | \
@@ -48,4 +48,4 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 WORKDIR /var/www
 
-CMD ["php-fpm"]
+CMD php-fpm -R
